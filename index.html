@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- پوسته برنامه موبایل دستیار: آیکون و حالت تمام‌صفحه؛ خود To Do در Apps Script است و این‌جا تمام‌صفحه نشان داده می‌شود
+     (در این حالت نوار «ساخته‌شده با Apps Script» گوگل هم نمی‌آید). آدرس و کلید فقط در همین گوشی می‌ماند، نه در این فایل. -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F3F8FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0D1621" media="(prefers-color-scheme: dark)">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dastyar">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Dastyar</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #F3F8FC; overflow: hidden; }
+  @media (prefers-color-scheme: dark) { html, body { background: #0D1621; } }
+  iframe { position: fixed; top: env(safe-area-inset-top); left: 0; width: 100%; height: calc(100% - env(safe-area-inset-top)); border: 0; }
+  .msg { font: 16px/1.7 system-ui, sans-serif; color: #24547E; padding: 48px 28px; text-align: center; }
+  .msg img { width: 72px; height: 72px; border-radius: 18px; display: block; margin: 0 auto 18px; }
+  @media (prefers-color-scheme: dark) { .msg { color: #CFE6F7; } }
+</style>
+</head>
+<body>
+<script>
+  // لینک دستیار یک بار با #u=<آدرس وب‌اپ>&k=<کلید> باز می‌شود و در همین گوشی ذخیره می‌شود
+  var p = new URLSearchParams(location.hash.slice(1)), c = null;
+  if (p.get('u') && p.get('k')) { c = { u: p.get('u'), k: p.get('k') }; try { localStorage.setItem('dastyar', JSON.stringify(c)); } catch (e) {} }
+  else try { c = JSON.parse(localStorage.getItem('dastyar')); } catch (e) {}
+  if (c && /^https:\/\/script\.google\.com\/(a\/[^/]+\/)?macros\/s\/[\w-]+\/exec$/.test(c.u)) {
+    var f = document.createElement('iframe');
+    f.src = c.u + '?k=' + encodeURIComponent(c.k);
+    f.allow = 'clipboard-write';
+    document.body.appendChild(f);
+  } else {
+    document.body.innerHTML = '<div class="msg"><img src="icon-192.png" alt="">Open the phone link from Dastyar on your computer once:<br><b>To Do → ⋯ → Add tasks from phone</b></div>';
+  }
+</script>
+</body>
+</html>
